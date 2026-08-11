@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: totto2727-org/monorepo/.github/actions/setup-nix@main
+      - name: Install workspace dependencies
+        run: nix develop --command bun install --frozen-lockfile
+      - name: Check Go package
+        run: nix develop --command vp run check
+      - name: Test Go package
+        run: nix develop --command vp run test
+      - name: Build Go package
+        run: nix develop --command vp run build
+      - name: Build Nix package
+        run: nix build --no-link
