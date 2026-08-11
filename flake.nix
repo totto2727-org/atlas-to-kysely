@@ -1,19 +1,12 @@
 {
   description = "Generate Kysely type definitions from Atlas schemas";
 
-  inputs = {
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
-    vite-plus-overlay = {
-      url = "github:ryoppippi/nix-vite-plus";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
+  inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
 
   outputs =
     {
       self,
       nixpkgs,
-      vite-plus-overlay,
       ...
     }:
     let
@@ -24,10 +17,7 @@
       ];
       forEachSystem = nixpkgs.lib.genAttrs supportedSystems;
       mkPkgs = system:
-        import nixpkgs {
-          inherit system;
-          overlays = [ vite-plus-overlay.overlays.default ];
-        };
+        import nixpkgs { inherit system; };
       mkAtlasToKysely = pkgs: pkgs.callPackage ./package.nix { };
     in
     {
@@ -39,11 +29,9 @@
         {
           default = pkgs.mkShell {
             packages = [
-              pkgs.bun
               pkgs.go
               pkgs.golangci-lint
-              pkgs.nodejs_24
-              pkgs.vite-plus
+              pkgs.just
             ];
           };
         }
