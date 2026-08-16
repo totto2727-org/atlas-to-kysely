@@ -60,55 +60,7 @@ go run . --input fixture/main/schema.hcl
 
 ## API
 
-### `atlas-to-kysely`
-
-The CLI requires `--input` (or `-i`) and prints generated TypeScript to standard output unless `--output` (or `-o`) is provided. `--camel-case` applies Kysely's default `CamelCasePlugin` transform to table and column identifiers. `--help` prints the complete flag reference.
-
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts --camel-case
-```
-
-The flags are:
-
-| Flag | Default | Description |
-| --- | --- | --- |
-| `--input`, `-i` | required | Path to the Atlas `schema.hcl` file. |
-| `--output`, `-o` | standard output | Path to the generated `.ts` file. When set, the command writes a table-count message to standard error. |
-| `--camel-case` | `false` | Apply Kysely's default camel-case transform to table and column identifiers. |
-| `--help` | — | Print usage and flag help. |
-
-The command exits non-zero when input is missing, the input file cannot be read, the HCL cannot be parsed, no schemas are present, or the output file cannot be written.
-
-### `ParseHCLBytes`
-
-Parses Atlas SQLite HCL bytes with the official Atlas codec and returns a `*schema.Realm`. It rejects invalid HCL and documents the no-schema case as an error.
-
-```go
-realm, err := ParseHCLBytes(source)
-if err != nil {
-	return err
-}
-```
-
-### `GenerateOptions`
-
-Configures generation. Set `CamelCase` to `true` to apply the same default identifier transform as the CLI's `--camel-case` flag; leave it `false` for identity naming.
-
-```go
-options := GenerateOptions{CamelCase: true}
-```
-
-### `GenerateKysely`
-
-Converts an Atlas `*schema.Realm` into a deterministic Kysely-compatible TypeScript string using the supplied options. Generated columns include `Generated<T>` and trigger the corresponding type-only Kysely import.
-
-```go
-types, err := GenerateKysely(realm, GenerateOptions{CamelCase: true})
-if err != nil {
-	return err
-}
-fmt.Print(types)
-```
+The supported interface is the `atlas-to-kysely` CLI. It reads an Atlas SQLite schema and writes Kysely-compatible TypeScript to standard output or an output file, with an optional camel-case transform. See the [complete CLI reference](./AGENTS.md#cli-reference) for flags, output behavior, and failure cases.
 
 ## Type mapping
 

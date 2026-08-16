@@ -37,6 +37,23 @@ go.mod              Go module metadata and dependencies
 - `nix build --no-link` — Evaluate and build the installable `atlas-to-kysely` Nix package without retaining a result link.
 - `nix flake check --all-systems --no-build` — Evaluate flake checks for every supported system without building packages.
 
+### CLI reference
+
+The `atlas-to-kysely` command requires `--input` (or `-i`) and prints generated TypeScript to standard output unless `--output` (or `-o`) is provided. `--camel-case` applies Kysely's default `CamelCasePlugin` transform to table and column identifiers, and `--help` prints the flag reference.
+
+```bash
+atlas-to-kysely --input schema.hcl --output src/db/types.ts --camel-case
+```
+
+| Flag | Default | Description |
+| --- | --- | --- |
+| `--input`, `-i` | required | Path to the Atlas `schema.hcl` file. |
+| `--output`, `-o` | standard output | Path to the generated `.ts` file. When set, the command writes a table-count message to standard error. |
+| `--camel-case` | `false` | Apply Kysely's default camel-case transform to table and column identifiers. |
+| `--help` | — | Print usage and flag help. |
+
+The command exits non-zero when input is missing, the input file cannot be read, the HCL cannot be parsed, no schemas are present, or the output file cannot be written.
+
 ## Architecture
 
 ### CLI boundary
