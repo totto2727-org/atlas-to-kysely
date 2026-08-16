@@ -62,21 +62,6 @@ go run . --input fixture/main/schema.hcl
 
 サポート対象のインターフェースは`atlas-to-kysely` CLIです。Atlas SQLiteスキーマを読み込み、キャメルケース変換を任意で適用したKysely互換のTypeScriptを標準出力または出力ファイルへ書き込みます。このリポジトリは`main`パッケージであり、importして利用するGo APIは公開していません。フラグ、出力動作、失敗条件については[完全なCLIリファレンス](./AGENTS.md#cli-reference)を参照してください。
 
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts --camel-case
-```
-
-フラグは次のとおりです。
-
-| フラグ | デフォルト | 説明 |
-| --- | --- | --- |
-| `--input`, `-i` | 必須 | Atlasの`schema.hcl`ファイルへのパス。 |
-| `--output`, `-o` | 標準出力 | 生成する`.ts`ファイルへのパス。指定時はテーブル数のメッセージを標準エラー出力へ書き込みます。 |
-| `--camel-case` | `false` | Kyselyのデフォルトのキャメルケース変換をテーブルおよびカラムの識別子へ適用します。 |
-| `--help` | — | 使い方とフラグのヘルプを表示します。 |
-
-入力がない場合、入力ファイルを読み取れない場合、HCLを解析できない場合、スキーマが存在しない場合、または出力ファイルを書き込めない場合、コマンドは0以外の終了ステータスで終了します。
-
 ## 型マッピング
 
 | AtlasまたはSQLiteの型 | TypeScript型 |
