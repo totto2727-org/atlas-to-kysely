@@ -12,7 +12,7 @@ check:
 
 build:
     mkdir -p build
-    go build -o build/atlas-kysely-gen .
+    go build -o build/atlas-to-kysely .
 
 test:
     go test -race ./...

@@ -1,4 +1,4 @@
-# atlas-kysely-gen
+# atlas-to-kysely
 
 Atlasの`schema.hcl`からKyselyの型定義を生成するCLIツールです。
 
@@ -17,23 +17,23 @@ go install github.com/totto2727-org/atlas-to-kysely@latest
 ```bash
 git clone https://github.com/totto2727-org/atlas-to-kysely
 cd atlas-to-kysely
-go build -o atlas-kysely-gen .
+go build -o atlas-to-kysely .
 ```
 
 ## 使い方
 
 ```bash
 # 標準出力に出力（識別子はそのまま）
-atlas-kysely-gen --input schema.hcl
+atlas-to-kysely --input schema.hcl
 
 # ファイルに出力
-atlas-kysely-gen --input schema.hcl --output src/db/types.ts
+atlas-to-kysely --input schema.hcl --output src/db/types.ts
 
 # 短縮形
-atlas-kysely-gen -i schema.hcl -o src/db/types.ts
+atlas-to-kysely -i schema.hcl -o src/db/types.ts
 
 # KyselyのCamelCasePluginでカラム名とテーブル名を変換
-atlas-kysely-gen -i schema.hcl --camel-case
+atlas-to-kysely -i schema.hcl --camel-case
 ```
 
 ### フラグ
@@ -51,7 +51,7 @@ atlas-kysely-gen -i schema.hcl --camel-case
 ```json
 {
   "scripts": {
-    "db:codegen": "atlas-kysely-gen -i schema.hcl -o src/db/types.ts"
+    "db:codegen": "atlas-to-kysely -i schema.hcl -o src/db/types.ts"
   }
 }
 ```
@@ -125,7 +125,7 @@ export interface DB {
 ## 開発
 
 ```bash
-go run *.go -i fixture/schema.hcl
+go run . -i fixture/main/schema.hcl
 ```
 
 ## ロードマップ
