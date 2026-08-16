@@ -31,7 +31,7 @@ go.mod              Go module metadata and dependencies
 - `nix develop` — Enter the Nix shell with Go, golangci-lint, and Just.
 - `just fix` — Format Go code and apply supported golangci-lint fixes.
 - `just check` — Verify formatting and run golangci-lint without changing files.
-- `just build` — Build `build/atlas-kysely-gen` from the current module.
+- `just build` — Build `build/atlas-to-kysely` from the current module.
 - `just test` — Run all Go tests with the race detector.
 - `just ci` — Run `check`, `build`, and `test` in sequence.
 - `nix build --no-link` — Evaluate and build the installable `atlas-to-kysely` Nix package without retaining a result link.
