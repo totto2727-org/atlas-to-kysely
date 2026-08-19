@@ -10,12 +10,16 @@ atlas-to-kyselyは、Atlas SQLiteの`schema.hcl`ファイルから、Kysely互�
 atlas-to-kysely --input schema.hcl
 ```
 
+このコマンドは、生成したTypeScriptインターフェースを標準出力へ書き込みます。
+
 生成された型をファイルへ出力するか、オプションのKyselyキャメルケース変換を有効にします。
 
 ```bash
 atlas-to-kysely --input schema.hcl --output src/db/types.ts
 atlas-to-kysely --input schema.hcl --camel-case
 ```
+
+`--output`を指定したコマンドは`src/db/types.ts`を作成または上書きし、結果を標準エラー出力へ表示します。3テーブルのスキーマでは、例えば`Generated: src/db/types.ts  (3 table(s))`と表示されます。
 
 ## 主な機能
 
@@ -36,12 +40,6 @@ atlas-to-kysely --input schema.hcl --camel-case
 
 ```bash
 go install github.com/totto2727-org/atlas-to-kysely@latest
-```
-
-2. Atlasスキーマがあるディレクトリからコマンドを実行します。
-
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts
 ```
 
 ## API

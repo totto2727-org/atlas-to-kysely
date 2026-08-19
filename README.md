@@ -10,12 +10,16 @@ Run the installed command with an Atlas schema and write generated types to stan
 atlas-to-kysely --input schema.hcl
 ```
 
+This command writes the generated TypeScript interfaces to standard output.
+
 Write the generated types to a file, or enable the optional Kysely camel-case transform:
 
 ```bash
 atlas-to-kysely --input schema.hcl --output src/db/types.ts
 atlas-to-kysely --input schema.hcl --camel-case
 ```
+
+The `--output` command creates or overwrites `src/db/types.ts` and reports the result to standard error, for example `Generated: src/db/types.ts  (3 table(s))` for a three-table schema.
 
 ## Key features
 
@@ -36,12 +40,6 @@ atlas-to-kysely --input schema.hcl --camel-case
 
 ```bash
 go install github.com/totto2727-org/atlas-to-kysely@latest
-```
-
-2. Run the command from the directory containing your Atlas schema.
-
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts
 ```
 
 ## API
