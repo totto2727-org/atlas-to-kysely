@@ -4,13 +4,45 @@ atlas-to-kyselyは、Atlas SQLiteの`schema.hcl`ファイルから、Kysely互�
 
 ## 使い方
 
-インストールしたコマンドにAtlasスキーマを渡し、生成された型を標準出力へ出力します。
+Atlas SQLiteスキーマを`schema.hcl`として保存します。
+
+```hcl
+schema "main" {}
+
+table "users" {
+  schema = schema.main
+  column "id" {
+    type           = integer
+    null           = false
+    auto_increment = true
+  }
+  column "display_name" {
+    type = text
+    null = true
+  }
+}
+```
+
+インストールしたコマンドを実行します。
 
 ```bash
 atlas-to-kysely --input schema.hcl
 ```
 
-このコマンドは、生成したTypeScriptインターフェースを標準出力へ書き込みます。
+標準出力には、次のKysely互換型が含まれます。
+
+```typescript
+import type { Generated } from "kysely";
+
+export interface Users {
+  display_name: string | null;
+  id: Generated<number>;
+}
+
+export interface DB {
+  users: Users;
+}
+```
 
 生成された型をファイルへ出力するか、オプションのKyselyキャメルケース変換を有効にします。
 

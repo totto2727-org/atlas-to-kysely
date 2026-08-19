@@ -4,13 +4,45 @@ atlas-to-kysely generates Kysely-compatible TypeScript database interfaces from 
 
 ## Usage
 
-Run the installed command with an Atlas schema and write generated types to standard output:
+Save an Atlas SQLite schema as `schema.hcl`:
+
+```hcl
+schema "main" {}
+
+table "users" {
+  schema = schema.main
+  column "id" {
+    type           = integer
+    null           = false
+    auto_increment = true
+  }
+  column "display_name" {
+    type = text
+    null = true
+  }
+}
+```
+
+Run the installed command:
 
 ```bash
 atlas-to-kysely --input schema.hcl
 ```
 
-This command writes the generated TypeScript interfaces to standard output.
+The standard output includes these Kysely-compatible types:
+
+```typescript
+import type { Generated } from "kysely";
+
+export interface Users {
+  display_name: string | null;
+  id: Generated<number>;
+}
+
+export interface DB {
+  users: Users;
+}
+```
 
 Write the generated types to a file, or enable the optional Kysely camel-case transform:
 
