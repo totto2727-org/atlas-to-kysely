@@ -17,12 +17,6 @@ atlas-to-kysely --input schema.hcl --output src/db/types.ts
 atlas-to-kysely --input schema.hcl --camel-case
 ```
 
-リポジトリのfixtureを使ってローカルで一連の処理を実行できます。
-
-```bash
-go run . --input fixture/main/schema.hcl --output /tmp/types.ts
-```
-
 ## 主な機能
 
 - `ariga.io/atlas`を通じてAtlas SQLite HCLを直接解析するため、データベース接続やAtlas CLIは必要ありません。
@@ -33,7 +27,7 @@ go run . --input fixture/main/schema.hcl --output /tmp/types.ts
 
 ## 前提条件
 
-- **Go 1.24以降**: `go run`、`go install`、またはソースからのビルドに必要です。
+- **Go 1.24以降**: `go install`でコマンドをインストールするために必要です。
 - **Kysely**: 生成されたカラムが`Generated<T>`ラッパーを使う場合は、TypeScriptプロジェクトに`kysely`を追加してください。
 
 ## セットアップ
@@ -48,14 +42,6 @@ go install github.com/totto2727-org/atlas-to-kysely@latest
 
 ```bash
 atlas-to-kysely --input schema.hcl --output src/db/types.ts
-```
-
-3. または、リポジトリをcloneしてGoから直接実行します。
-
-```bash
-git clone https://github.com/totto2727-org/atlas-to-kysely.git
-cd atlas-to-kysely
-go run . --input fixture/main/schema.hcl
 ```
 
 ## API

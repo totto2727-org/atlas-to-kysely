@@ -17,12 +17,6 @@ atlas-to-kysely --input schema.hcl --output src/db/types.ts
 atlas-to-kysely --input schema.hcl --camel-case
 ```
 
-The repository fixture can be used for a complete local example:
-
-```bash
-go run . --input fixture/main/schema.hcl --output /tmp/types.ts
-```
-
 ## Key features
 
 - Parses Atlas SQLite HCL directly through `ariga.io/atlas`, so no database connection or Atlas CLI is required.
@@ -33,7 +27,7 @@ go run . --input fixture/main/schema.hcl --output /tmp/types.ts
 
 ## Prerequisites
 
-- **Go 1.24 or later**: Required for `go run`, `go install`, or building from source.
+- **Go 1.24 or later**: Required to install the command with `go install`.
 - **Kysely**: Add `kysely` to the TypeScript project when generated columns use the `Generated<T>` wrapper.
 
 ## Setup
@@ -48,14 +42,6 @@ go install github.com/totto2727-org/atlas-to-kysely@latest
 
 ```bash
 atlas-to-kysely --input schema.hcl --output src/db/types.ts
-```
-
-3. Alternatively, clone the repository and run it directly with Go.
-
-```bash
-git clone https://github.com/totto2727-org/atlas-to-kysely.git
-cd atlas-to-kysely
-go run . --input fixture/main/schema.hcl
 ```
 
 ## API
