@@ -46,7 +46,24 @@ atlas-to-kysely --input schema.hcl --output src/db/types.ts
 
 ## API
 
-The supported interface is the `atlas-to-kysely` CLI. It reads an Atlas SQLite schema and writes Kysely-compatible TypeScript to standard output or an output file, with an optional camel-case transform. This repository is a `main` package and does not publish a supported importable Go API. See the [complete CLI reference](./AGENTS.md#cli-reference) for flags, output behavior, and failure cases.
+The supported interface is the `atlas-to-kysely` CLI. This repository is a `main` package and does not publish a supported importable Go API.
+
+### Flags
+
+| Flag | Default | Description |
+| --- | --- | --- |
+| `--input`, `-i` | required | Path to the Atlas `schema.hcl` file. |
+| `--output`, `-o` | standard output | Path to the generated `.ts` file. |
+| `--camel-case` | `false` | Apply Kysely's default `CamelCasePlugin` transform to table and column identifiers. |
+| `--help` | — | Print usage and flag help, then exit successfully. |
+
+### Output
+
+Without `--output`, the command writes generated TypeScript to standard output. With `--output`, it writes the TypeScript file and reports `Generated: <path>  (<count> table(s))` to standard error. `--camel-case` transforms table and column identifiers; without it, identifiers are preserved.
+
+### Failures
+
+The command exits non-zero and writes an `Error:` message to standard error when the required input is missing, the input file cannot be read, the HCL is invalid or contains no schema, or the output file cannot be written. An unsupported flag exits non-zero after printing the flag error and usage.
 
 ## Type mapping
 
