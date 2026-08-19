@@ -60,7 +60,7 @@ go run . --input fixture/main/schema.hcl
 
 ## API
 
-The supported interface is the `atlas-to-kysely` CLI. It reads an Atlas SQLite schema and writes Kysely-compatible TypeScript to standard output or an output file, with an optional camel-case transform. See the [complete CLI reference](./AGENTS.md#cli-reference) for flags, output behavior, and failure cases.
+The supported interface is the `atlas-to-kysely` CLI. It reads an Atlas SQLite schema and writes Kysely-compatible TypeScript to standard output or an output file, with an optional camel-case transform. This repository is a `main` package and does not publish a supported importable Go API. See the [complete CLI reference](./AGENTS.md#cli-reference) for flags, output behavior, and failure cases.
 
 ## Type mapping
 

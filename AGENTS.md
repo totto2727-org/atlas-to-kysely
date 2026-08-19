@@ -61,6 +61,7 @@ The command exits non-zero when input is missing, the input file cannot be read,
 - `main.go` owns flag parsing, required-input handling, file reads, generation invocation, and stdout or output-file writes.
 - The CLI accepts `--input`/`-i`, `--output`/`-o`, and `--camel-case`; keep the user-visible flags and README API reference synchronized.
 - Output-file success diagnostics go to standard error so generated TypeScript remains clean on standard output when no output path is supplied.
+- The module uses `package main`; `ParseHCLBytes`, `GenerateOptions`, and `GenerateKysely` are internal implementation helpers used by the CLI and tests, not a supported importable Go API.
 
 ### Atlas loading
 
