@@ -23,7 +23,19 @@ table "users" {
 }
 ```
 
-Run the installed command:
+Run the command once from the latest Go module without installing it:
+
+```bash
+go run github.com/totto2727-org/atlas-to-kysely@latest --input schema.hcl
+```
+
+Or run the same command through Nix without installing it:
+
+```bash
+nix run 'github:totto2727-org/atlas-to-kysely' -- --input schema.hcl
+```
+
+The same input can be generated with an installed `atlas-to-kysely` command:
 
 ```bash
 atlas-to-kysely --input schema.hcl
@@ -63,15 +75,46 @@ The `--output` command creates or overwrites `src/db/types.ts` and reports the r
 
 ## Prerequisites
 
-- **Go 1.24 or later**: Required to install the command with `go install`.
+- **Go 1.24 or later**: Required only for the `go install` route.
+- **Nix with flakes enabled**: Required only for the `nix run`, `nix profile add`, and consumer-flake routes.
 - **Kysely**: Add `kysely` to the TypeScript project when generated columns use the `Generated<T>` wrapper.
 
 ## Setup
+
+Choose one installation route. The project does not publish an npm package, so `npx` and `npm install --global` are not available.
 
 1. Install the command from the Go module.
 
 ```bash
 go install github.com/totto2727-org/atlas-to-kysely@latest
+```
+
+2. Install the published flake package into the default Nix profile.
+
+```bash
+nix profile add 'github:totto2727-org/atlas-to-kysely#atlas-to-kysely'
+```
+
+3. Add the package to a consumer `flake.nix`. This example creates a reusable package containing the CLI; replace `aarch64-darwin` with a supported target when needed.
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    atlas-to-kysely.url = "github:totto2727-org/atlas-to-kysely";
+  };
+
+  outputs = { nixpkgs, atlas-to-kysely, ... }:
+    let
+      system = "aarch64-darwin";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      packages.${system}.default = pkgs.buildEnv {
+        name = "schema-tools";
+        paths = [ atlas-to-kysely.packages.${system}.atlas-to-kysely ];
+      };
+    };
+}
 ```
 
 ## API
