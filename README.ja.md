@@ -4,10 +4,44 @@ atlas-to-kyselyは、Atlas SQLiteの`schema.hcl`ファイルから、Kysely互�
 
 ## 使い方
 
-インストールしたコマンドにAtlasスキーマを渡し、生成された型を標準出力へ出力します。
+Atlas SQLiteスキーマを`schema.hcl`として保存します。
+
+```hcl
+schema "main" {}
+
+table "users" {
+  schema = schema.main
+  column "id" {
+    type           = integer
+    null           = false
+    auto_increment = true
+  }
+  column "display_name" {
+    type = text
+    null = true
+  }
+}
+```
+
+インストールしたコマンドを実行します。
 
 ```bash
 atlas-to-kysely --input schema.hcl
+```
+
+標準出力には、次のKysely互換型が含まれます。
+
+```typescript
+import type { Generated } from "kysely";
+
+export interface Users {
+  display_name: string | null;
+  id: Generated<number>;
+}
+
+export interface DB {
+  users: Users;
+}
 ```
 
 生成された型をファイルへ出力するか、オプションのKyselyキャメルケース変換を有効にします。
@@ -17,11 +51,7 @@ atlas-to-kysely --input schema.hcl --output src/db/types.ts
 atlas-to-kysely --input schema.hcl --camel-case
 ```
 
-リポジトリのfixtureを使ってローカルで一連の処理を実行できます。
-
-```bash
-go run . --input fixture/main/schema.hcl --output /tmp/types.ts
-```
+`--output`を指定したコマンドは`src/db/types.ts`を作成または上書きし、結果を標準エラー出力へ表示します。3テーブルのスキーマでは、例えば`Generated: src/db/types.ts  (3 table(s))`と表示されます。
 
 ## 主な機能
 
@@ -33,7 +63,7 @@ go run . --input fixture/main/schema.hcl --output /tmp/types.ts
 
 ## 前提条件
 
-- **Go 1.24以降**: `go run`、`go install`、またはソースからのビルドに必要です。
+- **Go 1.24以降**: `go install`でコマンドをインストールするために必要です。
 - **Kysely**: 生成されたカラムが`Generated<T>`ラッパーを使う場合は、TypeScriptプロジェクトに`kysely`を追加してください。
 
 ## セットアップ
@@ -44,23 +74,26 @@ go run . --input fixture/main/schema.hcl --output /tmp/types.ts
 go install github.com/totto2727-org/atlas-to-kysely@latest
 ```
 
-2. Atlasスキーマがあるディレクトリからコマンドを実行します。
-
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts
-```
-
-3. または、リポジトリをcloneしてGoから直接実行します。
-
-```bash
-git clone https://github.com/totto2727-org/atlas-to-kysely.git
-cd atlas-to-kysely
-go run . --input fixture/main/schema.hcl
-```
-
 ## API
 
-サポート対象のインターフェースは`atlas-to-kysely` CLIです。Atlas SQLiteスキーマを読み込み、キャメルケース変換を任意で適用したKysely互換のTypeScriptを標準出力または出力ファイルへ書き込みます。このリポジトリは`main`パッケージであり、importして利用するGo APIは公開していません。フラグ、出力動作、失敗条件については[完全なCLIリファレンス](./AGENTS.md#cli-reference)を参照してください。
+サポート対象のインターフェースは`atlas-to-kysely` CLIです。このリポジトリは`main`パッケージであり、importして利用するGo APIは公開していません。
+
+### フラグ
+
+| フラグ | デフォルト | 説明 |
+| --- | --- | --- |
+| `--input`、`-i` | 必須 | Atlasの`schema.hcl`ファイルへのパス。 |
+| `--output`、`-o` | 標準出力 | 生成する`.ts`ファイルへのパス。 |
+| `--camel-case` | `false` | テーブルとカラムの識別子にKyselyのデフォルト`CamelCasePlugin`変換を適用する。 |
+| `--help` | — | 使い方とフラグのヘルプを表示し、正常終了する。 |
+
+### 出力
+
+`--output`を指定しない場合、生成したTypeScriptを標準出力へ書き込みます。`--output`を指定した場合はTypeScriptファイルを書き込み、`Generated: <path>  (<count> table(s))`を標準エラー出力へ表示します。`--camel-case`はテーブルとカラムの識別子を変換し、指定しない場合は識別子を保持します。
+
+### 失敗時
+
+必須の入力がない場合、入力ファイルを読み込めない場合、HCLが不正またはスキーマを含まない場合、または出力ファイルを書き込めない場合、コマンドは非ゼロで終了し、標準エラー出力へ`Error:`メッセージを書き込みます。未対応のフラグを渡した場合は、フラグエラーと使い方を表示した後、非ゼロで終了します。
 
 ## 型マッピング
 

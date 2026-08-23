@@ -4,10 +4,44 @@ atlas-to-kysely generates Kysely-compatible TypeScript database interfaces from 
 
 ## Usage
 
-Run the installed command with an Atlas schema and write generated types to standard output:
+Save an Atlas SQLite schema as `schema.hcl`:
+
+```hcl
+schema "main" {}
+
+table "users" {
+  schema = schema.main
+  column "id" {
+    type           = integer
+    null           = false
+    auto_increment = true
+  }
+  column "display_name" {
+    type = text
+    null = true
+  }
+}
+```
+
+Run the installed command:
 
 ```bash
 atlas-to-kysely --input schema.hcl
+```
+
+The standard output includes these Kysely-compatible types:
+
+```typescript
+import type { Generated } from "kysely";
+
+export interface Users {
+  display_name: string | null;
+  id: Generated<number>;
+}
+
+export interface DB {
+  users: Users;
+}
 ```
 
 Write the generated types to a file, or enable the optional Kysely camel-case transform:
@@ -17,11 +51,7 @@ atlas-to-kysely --input schema.hcl --output src/db/types.ts
 atlas-to-kysely --input schema.hcl --camel-case
 ```
 
-The repository fixture can be used for a complete local example:
-
-```bash
-go run . --input fixture/main/schema.hcl --output /tmp/types.ts
-```
+The `--output` command creates or overwrites `src/db/types.ts` and reports the result to standard error, for example `Generated: src/db/types.ts  (3 table(s))` for a three-table schema.
 
 ## Key features
 
@@ -33,7 +63,7 @@ go run . --input fixture/main/schema.hcl --output /tmp/types.ts
 
 ## Prerequisites
 
-- **Go 1.24 or later**: Required for `go run`, `go install`, or building from source.
+- **Go 1.24 or later**: Required to install the command with `go install`.
 - **Kysely**: Add `kysely` to the TypeScript project when generated columns use the `Generated<T>` wrapper.
 
 ## Setup
@@ -44,23 +74,26 @@ go run . --input fixture/main/schema.hcl --output /tmp/types.ts
 go install github.com/totto2727-org/atlas-to-kysely@latest
 ```
 
-2. Run the command from the directory containing your Atlas schema.
-
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts
-```
-
-3. Alternatively, clone the repository and run it directly with Go.
-
-```bash
-git clone https://github.com/totto2727-org/atlas-to-kysely.git
-cd atlas-to-kysely
-go run . --input fixture/main/schema.hcl
-```
-
 ## API
 
-The supported interface is the `atlas-to-kysely` CLI. It reads an Atlas SQLite schema and writes Kysely-compatible TypeScript to standard output or an output file, with an optional camel-case transform. This repository is a `main` package and does not publish a supported importable Go API. See the [complete CLI reference](./AGENTS.md#cli-reference) for flags, output behavior, and failure cases.
+The supported interface is the `atlas-to-kysely` CLI. This repository is a `main` package and does not publish a supported importable Go API.
+
+### Flags
+
+| Flag | Default | Description |
+| --- | --- | --- |
+| `--input`, `-i` | required | Path to the Atlas `schema.hcl` file. |
+| `--output`, `-o` | standard output | Path to the generated `.ts` file. |
+| `--camel-case` | `false` | Apply Kysely's default `CamelCasePlugin` transform to table and column identifiers. |
+| `--help` | — | Print usage and flag help, then exit successfully. |
+
+### Output
+
+Without `--output`, the command writes generated TypeScript to standard output. With `--output`, it writes the TypeScript file and reports `Generated: <path>  (<count> table(s))` to standard error. `--camel-case` transforms table and column identifiers; without it, identifiers are preserved.
+
+### Failures
+
+The command exits non-zero and writes an `Error:` message to standard error when the required input is missing, the input file cannot be read, the HCL is invalid or contains no schema, or the output file cannot be written. An unsupported flag exits non-zero after printing the flag error and usage.
 
 ## Type mapping
 
