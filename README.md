@@ -83,6 +83,22 @@ The `--output` command creates or overwrites `src/db/types.ts` and reports the r
 
 Choose one installation route. The project does not publish an npm package, so `npx` and `npm install --global` are not available.
 
+### Run without permanent installation
+
+Acquire and inspect the latest command without adding it to a profile or `PATH`:
+
+```bash
+go run github.com/totto2727-org/atlas-to-kysely@latest --help
+```
+
+```bash
+nix run 'github:totto2727-org/atlas-to-kysely' -- --help
+```
+
+For a schema-to-types example and its output, see [Usage](#usage).
+
+### Install permanently
+
 1. Install the command from the Go module.
 
 ```bash

@@ -83,6 +83,22 @@ atlas-to-kysely --input schema.hcl --camel-case
 
 インストール経路を1つ選んでください。このプロジェクトはnpmパッケージを公開していないため、`npx`と`npm install --global`は利用できません。
 
+### 永続インストールなしで実行する
+
+プロファイルまたは`PATH`へ追加せずに、最新コマンドを取得してヘルプを確認します。
+
+```bash
+go run github.com/totto2727-org/atlas-to-kysely@latest --help
+```
+
+```bash
+nix run 'github:totto2727-org/atlas-to-kysely' -- --help
+```
+
+スキーマから型を生成する例と出力は[使い方](#使い方)を参照してください。
+
+### 永続的にインストールする
+
 1. Goモジュールからコマンドをインストールします。
 
 ```bash
