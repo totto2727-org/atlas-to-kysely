@@ -81,7 +81,7 @@ atlas-to-kysely --input schema.hcl --camel-case
 
 ## セットアップ
 
-インストール経路を1つ選んでください。このプロジェクトはnpmパッケージを公開していないため、`npx`と`npm install --global`は利用できません。
+インストール経路を1つ選んでください。
 
 ### 永続インストールなしで実行する
 

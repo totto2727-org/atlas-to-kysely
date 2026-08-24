@@ -81,7 +81,7 @@ The `--output` command creates or overwrites `src/db/types.ts` and reports the r
 
 ## Setup
 
-Choose one installation route. The project does not publish an npm package, so `npx` and `npm install --global` are not available.
+Choose one installation route.
 
 ### Run without permanent installation
 
