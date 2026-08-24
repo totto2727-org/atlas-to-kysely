@@ -23,19 +23,19 @@ table "users" {
 }
 ```
 
-インストールせずに、最新のGoモジュールからコマンドを一度実行します。
+スキーマからKysely互換のTypeScriptを生成します。
 
 ```bash
 go run github.com/totto2727-org/atlas-to-kysely@latest --input schema.hcl
 ```
 
-または、インストールせずにNix経由で同じコマンドを実行します。
+同じコマンドをNix経由でも実行できます。
 
 ```bash
 nix run 'github:totto2727-org/atlas-to-kysely' -- --input schema.hcl
 ```
 
-同じ入力は、インストール済みの`atlas-to-kysely`コマンドでも生成できます。
+インストール済みのコマンド:
 
 ```bash
 atlas-to-kysely --input schema.hcl
@@ -83,9 +83,7 @@ atlas-to-kysely --input schema.hcl --camel-case
 
 インストール経路を1つ選んでください。
 
-### 永続インストールなしで実行する
-
-プロファイルまたは`PATH`へ追加せずに、最新コマンドを取得してヘルプを確認します。
+### 一時実行
 
 ```bash
 go run github.com/totto2727-org/atlas-to-kysely@latest --help
@@ -95,23 +93,21 @@ go run github.com/totto2727-org/atlas-to-kysely@latest --help
 nix run 'github:totto2727-org/atlas-to-kysely' -- --help
 ```
 
-スキーマから型を生成する例と出力は[使い方](#使い方)を参照してください。
+### 永続インストール
 
-### 永続的にインストールする
-
-1. Goモジュールからコマンドをインストールします。
+Goモジュール:
 
 ```bash
 go install github.com/totto2727-org/atlas-to-kysely@latest
 ```
 
-2. 公開flakeパッケージをデフォルトのNixプロファイルへインストールします。
+Nixプロファイル:
 
 ```bash
 nix profile add 'github:totto2727-org/atlas-to-kysely#atlas-to-kysely'
 ```
 
-3. consumerの`flake.nix`へパッケージを追加します。この例はCLIを含む再利用可能なパッケージを作成します。必要に応じて`aarch64-darwin`をサポート対象のターゲットへ置き換えてください。
+consumerの`flake.nix`: この例はCLIを含む再利用可能なパッケージを作成します。必要に応じて`aarch64-darwin`をサポート対象のターゲットへ置き換えてください。
 
 ```nix
 {

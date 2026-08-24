@@ -23,19 +23,19 @@ table "users" {
 }
 ```
 
-Run the command once from the latest Go module without installing it:
+Generate Kysely-compatible TypeScript from the schema:
 
 ```bash
 go run github.com/totto2727-org/atlas-to-kysely@latest --input schema.hcl
 ```
 
-Or run the same command through Nix without installing it:
+The same command is available through Nix:
 
 ```bash
 nix run 'github:totto2727-org/atlas-to-kysely' -- --input schema.hcl
 ```
 
-The same input can be generated with an installed `atlas-to-kysely` command:
+Installed command:
 
 ```bash
 atlas-to-kysely --input schema.hcl
@@ -83,9 +83,7 @@ The `--output` command creates or overwrites `src/db/types.ts` and reports the r
 
 Choose one installation route.
 
-### Run without permanent installation
-
-Acquire and inspect the latest command without adding it to a profile or `PATH`:
+### One-shot
 
 ```bash
 go run github.com/totto2727-org/atlas-to-kysely@latest --help
@@ -95,23 +93,21 @@ go run github.com/totto2727-org/atlas-to-kysely@latest --help
 nix run 'github:totto2727-org/atlas-to-kysely' -- --help
 ```
 
-For a schema-to-types example and its output, see [Usage](#usage).
+### Persistent installation
 
-### Install permanently
-
-1. Install the command from the Go module.
+Go module:
 
 ```bash
 go install github.com/totto2727-org/atlas-to-kysely@latest
 ```
 
-2. Install the published flake package into the default Nix profile.
+Nix profile:
 
 ```bash
 nix profile add 'github:totto2727-org/atlas-to-kysely#atlas-to-kysely'
 ```
 
-3. Add the package to a consumer `flake.nix`. This example creates a reusable package containing the CLI; replace `aarch64-darwin` with a supported target when needed.
+Consumer `flake.nix`: This example creates a reusable package containing the CLI; replace `aarch64-darwin` with a supported target when needed.
 
 ```nix
 {
