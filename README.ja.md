@@ -29,18 +29,6 @@ table "users" {
 go run github.com/totto2727-org/atlas-to-kysely@latest --input schema.hcl
 ```
 
-同じコマンドをNix経由でも実行できます。
-
-```bash
-nix run 'github:totto2727-org/atlas-to-kysely' -- --input schema.hcl
-```
-
-インストール済みのコマンド:
-
-```bash
-atlas-to-kysely --input schema.hcl
-```
-
 標準出力には、次のKysely互換型が含まれます。
 
 ```typescript
@@ -56,14 +44,7 @@ export interface DB {
 }
 ```
 
-生成された型をファイルへ出力するか、オプションのKyselyキャメルケース変換を有効にします。
-
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts
-atlas-to-kysely --input schema.hcl --camel-case
-```
-
-`--output`を指定したコマンドは`src/db/types.ts`を作成または上書きし、結果を標準エラー出力へ表示します。3テーブルのスキーマでは、例えば`Generated: src/db/types.ts  (3 table(s))`と表示されます。
+生成された型は標準出力へ書き込まれます。
 
 ## 主な機能
 
@@ -83,31 +64,29 @@ atlas-to-kysely --input schema.hcl --camel-case
 
 インストール経路を1つ選んでください。
 
-### 一時実行
+### インストールせずに実行
 
 ```bash
+# Go
 go run github.com/totto2727-org/atlas-to-kysely@latest --help
-```
 
-```bash
+# Nix
 nix run 'github:totto2727-org/atlas-to-kysely' -- --help
 ```
 
-### 永続インストール
-
-Goモジュール:
+### インストール
 
 ```bash
+# Go
 go install github.com/totto2727-org/atlas-to-kysely@latest
-```
 
-Nixプロファイル:
-
-```bash
+# Nix
 nix profile add 'github:totto2727-org/atlas-to-kysely#atlas-to-kysely'
 ```
 
-consumerの`flake.nix`: この例はCLIを含む再利用可能なパッケージを作成します。必要に応じて`aarch64-darwin`をサポート対象のターゲットへ置き換えてください。
+### Nix flake
+
+この例はCLIを含む再利用可能なパッケージを作成します。必要に応じて`aarch64-darwin`をサポート対象のターゲットへ置き換えてください。
 
 ```nix
 {

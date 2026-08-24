@@ -29,18 +29,6 @@ Generate Kysely-compatible TypeScript from the schema:
 go run github.com/totto2727-org/atlas-to-kysely@latest --input schema.hcl
 ```
 
-The same command is available through Nix:
-
-```bash
-nix run 'github:totto2727-org/atlas-to-kysely' -- --input schema.hcl
-```
-
-Installed command:
-
-```bash
-atlas-to-kysely --input schema.hcl
-```
-
 The standard output includes these Kysely-compatible types:
 
 ```typescript
@@ -56,14 +44,7 @@ export interface DB {
 }
 ```
 
-Write the generated types to a file, or enable the optional Kysely camel-case transform:
-
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts
-atlas-to-kysely --input schema.hcl --camel-case
-```
-
-The `--output` command creates or overwrites `src/db/types.ts` and reports the result to standard error, for example `Generated: src/db/types.ts  (3 table(s))` for a three-table schema.
+The generated types are written to standard output.
 
 ## Key features
 
@@ -83,31 +64,29 @@ The `--output` command creates or overwrites `src/db/types.ts` and reports the r
 
 Choose one installation route.
 
-### One-shot
+### Run without installing
 
 ```bash
+# Go
 go run github.com/totto2727-org/atlas-to-kysely@latest --help
-```
 
-```bash
+# Nix
 nix run 'github:totto2727-org/atlas-to-kysely' -- --help
 ```
 
-### Persistent installation
-
-Go module:
+### Install
 
 ```bash
+# Go
 go install github.com/totto2727-org/atlas-to-kysely@latest
-```
 
-Nix profile:
-
-```bash
+# Nix
 nix profile add 'github:totto2727-org/atlas-to-kysely#atlas-to-kysely'
 ```
 
-Consumer `flake.nix`: This example creates a reusable package containing the CLI; replace `aarch64-darwin` with a supported target when needed.
+### Nix flake
+
+This example creates a reusable package containing the CLI; replace `aarch64-darwin` with a supported target when needed.
 
 ```nix
 {
