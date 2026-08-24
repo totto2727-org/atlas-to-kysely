@@ -64,7 +64,7 @@ export interface DB {
 
 インストール経路を1つ選んでください。
 
-### インストールせずに実行
+### Run without installing
 
 ```bash
 # Go
@@ -74,7 +74,7 @@ go run github.com/totto2727-org/atlas-to-kysely@latest --help
 nix run 'github:totto2727-org/atlas-to-kysely' -- --help
 ```
 
-### インストール
+### Install
 
 ```bash
 # Go
