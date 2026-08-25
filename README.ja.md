@@ -23,10 +23,10 @@ table "users" {
 }
 ```
 
-インストールしたコマンドを実行します。
+スキーマからKysely互換のTypeScriptを生成します。
 
 ```bash
-atlas-to-kysely --input schema.hcl
+go run github.com/totto2727-org/atlas-to-kysely@latest --input schema.hcl
 ```
 
 標準出力には、次のKysely互換型が含まれます。
@@ -44,14 +44,7 @@ export interface DB {
 }
 ```
 
-生成された型をファイルへ出力するか、オプションのKyselyキャメルケース変換を有効にします。
-
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts
-atlas-to-kysely --input schema.hcl --camel-case
-```
-
-`--output`を指定したコマンドは`src/db/types.ts`を作成または上書きし、結果を標準エラー出力へ表示します。3テーブルのスキーマでは、例えば`Generated: src/db/types.ts  (3 table(s))`と表示されます。
+生成された型は標準出力へ書き込まれます。
 
 ## 主な機能
 
@@ -63,15 +56,56 @@ atlas-to-kysely --input schema.hcl --camel-case
 
 ## 前提条件
 
-- **Go 1.24以降**: `go install`でコマンドをインストールするために必要です。
+- **Go 1.24以降**: `go install`を使う経路でのみ必要です。
+- **flakesを有効にしたNix**: `nix run`、`nix profile add`、およびconsumer flakeを使う経路でのみ必要です。
 - **Kysely**: 生成されたカラムが`Generated<T>`ラッパーを使う場合は、TypeScriptプロジェクトに`kysely`を追加してください。
 
 ## セットアップ
 
-1. Goモジュールからコマンドをインストールします。
+インストール経路を1つ選んでください。
+
+### Run without installing
 
 ```bash
+# Go
+go run github.com/totto2727-org/atlas-to-kysely@latest --help
+
+# Nix
+nix run 'github:totto2727-org/atlas-to-kysely' -- --help
+```
+
+### Install
+
+```bash
+# Go
 go install github.com/totto2727-org/atlas-to-kysely@latest
+
+# Nix
+nix profile add 'github:totto2727-org/atlas-to-kysely#atlas-to-kysely'
+```
+
+### Nix flake
+
+この例はCLIを含む再利用可能なパッケージを作成します。必要に応じて`aarch64-darwin`をサポート対象のターゲットへ置き換えてください。
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    atlas-to-kysely.url = "github:totto2727-org/atlas-to-kysely";
+  };
+
+  outputs = { nixpkgs, atlas-to-kysely, ... }:
+    let
+      system = "aarch64-darwin";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      packages.${system}.default = pkgs.buildEnv {
+        name = "schema-tools";
+        paths = [ atlas-to-kysely.packages.${system}.atlas-to-kysely ];
+      };
+    };
+}
 ```
 
 ## API

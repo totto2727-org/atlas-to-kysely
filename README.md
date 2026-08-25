@@ -23,10 +23,10 @@ table "users" {
 }
 ```
 
-Run the installed command:
+Generate Kysely-compatible TypeScript from the schema:
 
 ```bash
-atlas-to-kysely --input schema.hcl
+go run github.com/totto2727-org/atlas-to-kysely@latest --input schema.hcl
 ```
 
 The standard output includes these Kysely-compatible types:
@@ -44,14 +44,7 @@ export interface DB {
 }
 ```
 
-Write the generated types to a file, or enable the optional Kysely camel-case transform:
-
-```bash
-atlas-to-kysely --input schema.hcl --output src/db/types.ts
-atlas-to-kysely --input schema.hcl --camel-case
-```
-
-The `--output` command creates or overwrites `src/db/types.ts` and reports the result to standard error, for example `Generated: src/db/types.ts  (3 table(s))` for a three-table schema.
+The generated types are written to standard output.
 
 ## Key features
 
@@ -63,15 +56,56 @@ The `--output` command creates or overwrites `src/db/types.ts` and reports the r
 
 ## Prerequisites
 
-- **Go 1.24 or later**: Required to install the command with `go install`.
+- **Go 1.24 or later**: Required only for the `go install` route.
+- **Nix with flakes enabled**: Required only for the `nix run`, `nix profile add`, and consumer-flake routes.
 - **Kysely**: Add `kysely` to the TypeScript project when generated columns use the `Generated<T>` wrapper.
 
 ## Setup
 
-1. Install the command from the Go module.
+Choose one installation route.
+
+### Run without installing
 
 ```bash
+# Go
+go run github.com/totto2727-org/atlas-to-kysely@latest --help
+
+# Nix
+nix run 'github:totto2727-org/atlas-to-kysely' -- --help
+```
+
+### Install
+
+```bash
+# Go
 go install github.com/totto2727-org/atlas-to-kysely@latest
+
+# Nix
+nix profile add 'github:totto2727-org/atlas-to-kysely#atlas-to-kysely'
+```
+
+### Nix flake
+
+This example creates a reusable package containing the CLI; replace `aarch64-darwin` with a supported target when needed.
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    atlas-to-kysely.url = "github:totto2727-org/atlas-to-kysely";
+  };
+
+  outputs = { nixpkgs, atlas-to-kysely, ... }:
+    let
+      system = "aarch64-darwin";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      packages.${system}.default = pkgs.buildEnv {
+        name = "schema-tools";
+        paths = [ atlas-to-kysely.packages.${system}.atlas-to-kysely ];
+      };
+    };
+}
 ```
 
 ## API
