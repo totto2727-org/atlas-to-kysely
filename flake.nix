@@ -25,7 +25,7 @@
         let
           pkgs = mkPkgs system;
         in
-        {
+        rec {
           default = pkgs.mkShell {
             packages = [
               pkgs.go
@@ -37,6 +37,7 @@
               vp config
             '';
           };
+          ci = default.overrideAttrs (_: { shellHook = ""; });
         }
       );
 
