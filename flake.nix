@@ -16,8 +16,7 @@
         "x86_64-linux"
       ];
       forEachSystem = nixpkgs.lib.genAttrs supportedSystems;
-      mkPkgs = system:
-        import nixpkgs { inherit system; };
+      mkPkgs = system: import nixpkgs { inherit system; };
       mkAtlasToKysely = pkgs: pkgs.callPackage ./package.nix { };
     in
     {
@@ -33,6 +32,10 @@
               pkgs.golangci-lint
               pkgs.just
             ];
+            shellHook = ''
+              # Enable Git Hook
+              vp config
+            '';
           };
         }
       );
