@@ -4,3 +4,4 @@ build/
 result
 result-*
 .DS_Store
+/tmp/
