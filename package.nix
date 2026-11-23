@@ -4,7 +4,7 @@ buildGoModule {
   version = "0.0.0";
 
   src = ./.;
-  vendorHash = "sha256-dv6WFifPKOLchnf/WheHv7nyZ3aS9BuiNVUp0N4oO3Q=";
+  vendorHash = "sha256-bXUPYN1pAiRhp4gPBbQNQHnJSN8vrBZCeaDTh0iHcs4=";
 
   meta.mainProgram = "atlas-to-kysely";
 }
