@@ -2,7 +2,7 @@ module github.com/totto2727-org/atlas-to-kysely
 
 go 1.24
 
-require ariga.io/atlas v0.31.0
+require ariga.io/atlas v0.36.1
 
 require (
 	github.com/agext/levenshtein v1.2.1 // indirect
@@ -16,4 +16,5 @@ require (
 	github.com/zclconf/go-cty v1.14.4 // indirect
 	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
